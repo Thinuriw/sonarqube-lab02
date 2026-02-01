@@ -1,6 +1,7 @@
 package com.example;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,13 +16,13 @@ public class UserService {
     private static final String DB_PASSWORD =
             System.getenv().getOrDefault("DB_PASSWORD", "");
 
-    private Connection getConnection() throws Exception {
+    private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
 
     // FIXED: SQL Injection + closes resources
-    public void findUser(String username) throws Exception {
-        String sql = "SELECT * FROM users WHERE name = ?";
+    public void findUser(String username) throws SQLException {
+        String sql = "SELECT id, name FROM users WHERE name = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -29,14 +30,12 @@ public class UserService {
             ps.setString(1, username);
 
             try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                }
             }
         }
     }
 
     // FIXED: SQL Injection + closes resources
-    public void deleteUser(String username) throws Exception {
+    public void deleteUser(String username) throws SQLException {
         String sql = "DELETE FROM users WHERE name = ?";
 
         try (Connection conn = getConnection();

@@ -3,7 +3,9 @@ package com.example;
 public class Calculator {
 
     public int calculate(int a, int b, String op) {
-        if (op == null) return 0;
+        if (op == null) {
+            return 0;
+        }
 
         switch (op) {
             case "add":
@@ -31,9 +33,6 @@ public class Calculator {
             default:
                 return 0;
         }
-    }
-    public int addAgain(int a, int b) {
-        return a + b;
     }
 
     public int sumValues(int a, int b) {
