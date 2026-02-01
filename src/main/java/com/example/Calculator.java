@@ -7,32 +7,34 @@ public class Calculator {
             return 0;
         }
 
-        switch (op) {
-            case "add":
-            case "add-again":
-                return a + b;
+    switch (op) {
+        case "add", "add-again":
+            return a + b;
 
-            case "sub":
-            case "sub-again":
-                return a - b;
+        case "sub", "sub-again":
+            return a - b;
 
-            case "mul":
-                return a * b;
+        case "mul":
+            return a * b;
 
-            case "div":
-                if (b == 0) throw new IllegalArgumentException("Division by zero");
-                return a / b;
+        case "div":
+            if (b == 0) {
+                throw new IllegalArgumentException("Division by zero");
+            }
+            return a / b;
 
-            case "mod":
-                if (b == 0) throw new IllegalArgumentException("Modulo by zero");
-                return a % b;
+        case "mod":
+            if (b == 0) {
+                throw new IllegalArgumentException("Modulo by zero");
+            }
+            return a % b;
 
-            case "pow":
-                return (int) Math.pow(a, b);
+        case "pow":
+            return (int) Math.pow(a, b);
 
-            default:
-                return 0;
-        }
+        default:
+            return 0;
+    }
     }
 
     public int sumValues(int a, int b) {
