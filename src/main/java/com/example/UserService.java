@@ -1,46 +1,49 @@
-package main.java.com.example;
+package com.example;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.DriverManager;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class UserService {
 
-    // SECURITY ISSUE: Hardcoded credentials
-    private String password = "admin123";
+    // Pull secrets from environment variables instead of hardcoding
+    private static final String DB_URL =
+            System.getenv().getOrDefault("DB_URL", "jdbc:mysql://localhost/db");
+    private static final String DB_USER =
+            System.getenv().getOrDefault("DB_USER", "root");
+    private static final String DB_PASSWORD =
+            System.getenv().getOrDefault("DB_PASSWORD", "");
 
-    // VULNERABILITY: SQL Injection
-    public void findUser(String username) throws Exception {
-
-        Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost/db",
-                "root",
-                password
-        );
-
-        Statement st = conn.createStatement();
-        String query = "SELECT * FROM users WHERE name = '" + username + "'";
-
-        st.executeQuery(query);
+    private Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
 
-    // SMELL: Unused method
-    public void notUsed() {
-        System.out.println("I am never called");
+    // FIXED: SQL Injection + closes resources
+    public void findUser(String username) throws SQLException {
+        String sql = "SELECT id, name FROM users WHERE name = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, username);
+
+            try (ResultSet rs = ps.executeQuery()) {
+            // Intentionally left empty for lab demonstration purposes
+        }
+        }
     }
 
-    // EVEN WORSE: another SQL injection
-    public void deleteUser(String username) throws Exception {
+    // FIXED: SQL Injection + closes resources
+    public void deleteUser(String username) throws SQLException {
+        String sql = "DELETE FROM users WHERE name = ?";
 
-        Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost/db",
-                "root",
-                password
-        );
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        Statement st = conn.createStatement();
-        String query = "DELETE FROM users WHERE name = '" + username + "'";
-
-        st.execute(query);
+            ps.setString(1, username);
+            ps.executeUpdate();
+        }
     }
 }

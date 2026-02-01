@@ -1,41 +1,42 @@
-package main.java.com.example;
+package com.example;
 
 public class Calculator {
 
-   // EVEN WORSE: longer, more complex, duplicated logic
-public int calculate(int a, int b, String op) {
-if(op.equals("add")) {
-return a + b;
-} else if(op.equals("add-again")) {
-return a + b; // DUPLICATION
-} else if(op.equals("sub")) {
-return a - b;
-} else if(op.equals("sub-again")) {
-return a - b; // DUPLICATION
-} else if(op.equals("mul")) {
-return a * b;
-} else if(op.equals("div")) {
-if(b == 0) {
-return 0;
-} else {
-return a / b;
-}
-} else if(op.equals("mod")) {
-return a % b;
-} else if(op.equals("pow")) {
-int result = 1;
-for(int i = 0; i < b; i++) {
-result = result * a;
-}
-return result;
-} else {
-return 0;
-}
-}
-// INTENTIONAL DUPLICATION
-public int addAgain(int a, int b) {
-return a + b;
-}
+    public int calculate(int a, int b, String op) {
+        if (op == null) {
+            return 0;
+        }
+
+    switch (op) {
+        case "add", "add-again":
+            return a + b;
+
+        case "sub", "sub-again":
+            return a - b;
+
+        case "mul":
+            return a * b;
+
+        case "div":
+            if (b == 0) {
+                throw new IllegalArgumentException("Division by zero");
+            }
+            return a / b;
+
+        case "mod":
+            if (b == 0) {
+                throw new IllegalArgumentException("Modulo by zero");
+            }
+            return a % b;
+
+        case "pow":
+            return (int) Math.pow(a, b);
+
+        default:
+            return 0;
+    }
+    }
+
     public int sumValues(int a, int b) {
         return a + b;
     }
